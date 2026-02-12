@@ -15,6 +15,7 @@ let maintenanceState = {
   until: null // timestamp (ms) or null
 };
 let maintenanceTimerInterval = null;
+let lastReboot = null;
 
 const STORAGE_KEYS = {
   FAVORITES: "na_favorites",
@@ -23,7 +24,9 @@ const STORAGE_KEYS = {
   USERNAME: "na_username",
   GAMES: "na_games_override",
   STATS: "na_stats",
-  MAINTENANCE: "na_maintenance"
+  MAINTENANCE: "na_maintenance",
+  LAST_REBOOT: "na_last_reboot",
+  BOOT_DONE: "na_boot_done"
 };
 
 // --- DOM helpers ---
@@ -43,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderRecommended();
   });
   applyMaintenanceState();
+  handleBootSequence();
 });
 
 // --- Load games (with local override) ---
@@ -114,6 +118,12 @@ function loadLocalState() {
       };
     } catch {}
   }
+
+  // Last reboot
+  const rebootRaw = localStorage.getItem(STORAGE_KEYS.LAST_REBOOT);
+  if (rebootRaw) {
+    lastReboot = rebootRaw;
+  }
 }
 
 function saveLocalState() {
@@ -124,6 +134,30 @@ function saveLocalState() {
     JSON.stringify({ totalGamesPlayed })
   );
   localStorage.setItem(STORAGE_KEYS.MAINTENANCE, JSON.stringify(maintenanceState));
+  if (lastReboot) {
+    localStorage.setItem(STORAGE_KEYS.LAST_REBOOT, lastReboot);
+  }
+}
+
+// --- Boot sequence ---
+
+function handleBootSequence() {
+  const bootDone = localStorage.getItem(STORAGE_KEYS.BOOT_DONE);
+  const overlay = $("#bootOverlay");
+  if (bootDone) {
+    overlay.classList.add("hidden");
+    return;
+  }
+
+  // Simulate boot time
+  setTimeout(() => {
+    overlay.classList.add("hidden");
+    localStorage.setItem(STORAGE_KEYS.BOOT_DONE, "1");
+    // First boot counts as a reboot
+    lastReboot = new Date().toLocaleString();
+    updateDiagnostics();
+    saveLocalState();
+  }, 2300);
 }
 
 // --- Events ---
@@ -179,18 +213,22 @@ function attachEvents() {
     updateFavoriteButton();
   });
 
-  // Admin modal (normal topbar)
+  // Admin modal (topbar)
   $("#adminBtn").addEventListener("click", () => {
     openAdminModal();
   });
 
-  // Admin modal (from System Offline overlay)
+  // Admin modal (System Offline overlay)
   $("#maintenanceAdminBtn").addEventListener("click", () => {
     openAdminModal();
   });
 
   $("#closeAdmin").addEventListener("click", () => {
     $("#adminModal").classList.add("hidden");
+    // If maintenance mode is still active, show overlay again
+    if (maintenanceState.enabled) {
+      $("#maintenanceOverlay").style.display = "flex";
+    }
   });
 
   $("#adminLoginBtn").addEventListener("click", handleAdminLogin);
@@ -200,14 +238,29 @@ function attachEvents() {
   // Maintenance controls in admin
   $("#maintApplyBtn").addEventListener("click", handleApplyMaintenance);
   $("#maintDisableBtn").addEventListener("click", handleDisableMaintenance);
+
+  // Bypass Offline hotkey: L
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "l" || e.key === "L") {
+      openAdminModal();
+    }
+  });
 }
 
 function openAdminModal() {
+  // Show admin modal
   $("#adminModal").classList.remove("hidden");
+
+  // Always show login screen first
   $("#adminAuth").classList.remove("hidden");
   $("#adminBody").classList.add("hidden");
+
+  // Reset fields
   $("#adminUsername").value = "";
   $("#adminPassword").value = "";
+
+  // Hide maintenance overlay while admin is open
+  $("#maintenanceOverlay").style.display = "none";
 }
 
 // --- Filtering + rendering ---
@@ -285,7 +338,6 @@ function renderGameList() {
 
 function renderCategoryFilter() {
   const select = $("#categoryFilter");
-  // Clear existing except "all"
   select.innerHTML = '<option value="all">All Categories</option>';
   const categories = Array.from(new Set(allGames.map((g) => g.category))).sort();
   categories.forEach((cat) => {
@@ -304,13 +356,11 @@ function playGame(id) {
 
   currentGameId = id;
 
-  // Update iframe
   const frame = $("#gameFrame");
   frame.src = game.url;
   frame.style.display = "block";
   $("#playerPlaceholder").style.display = "none";
 
-  // Update meta
   $("#playerTitle").textContent = game.title;
   $("#gameDescription").textContent = game.description || "";
   $("#gameCategory").textContent = game.category;
@@ -318,10 +368,8 @@ function playGame(id) {
   $("#gamePlays").textContent = `${game.plays} plays`;
   $("#gameMeta").classList.remove("hidden");
 
-  // Recent
   recent = [id, ...recent.filter((x) => x !== id)].slice(0, 15);
 
-  // Stats
   totalGamesPlayed += 1;
 
   saveLocalState();
@@ -356,7 +404,6 @@ function renderRecommended() {
   const container = $("#recommendedList");
   container.innerHTML = "";
 
-  // Simple "recommended": top 3 by plays, excluding current
   const sorted = [...allGames]
     .filter((g) => g.id !== currentGameId)
     .sort((a, b) => (b.plays || 0) - (a.plays || 0))
@@ -392,6 +439,12 @@ function handleAdminLogin() {
     $("#adminBody").classList.remove("hidden");
     renderAdminGameList();
     populateMaintenanceControls();
+    // Play login sound
+    const s = $("#adminLoginSound");
+    if (s) {
+      s.currentTime = 0;
+      s.play().catch(() => {});
+    }
   } else {
     alert("Wrong username or password.");
   }
@@ -484,10 +537,14 @@ function applyMaintenanceState() {
 
   if (maintenanceState.enabled) {
     overlay.classList.remove("hidden");
+    overlay.style.display = "flex";
     startMaintenanceTimer();
+    updateDiagnostics();
   } else {
     overlay.classList.add("hidden");
+    overlay.style.display = "none";
     stopMaintenanceTimer();
+    updateDiagnostics();
   }
 }
 
@@ -513,6 +570,10 @@ function showRebootOverlay() {
   setTimeout(() => {
     overlay.classList.add("hidden");
   }, 2000);
+  // Record reboot time
+  lastReboot = new Date().toLocaleString();
+  updateDiagnostics();
+  saveLocalState();
 }
 
 function updateMaintenanceTimerDisplay() {
@@ -532,7 +593,6 @@ function updateMaintenanceTimerDisplay() {
   const diff = maintenanceState.until - now;
 
   if (diff <= 0) {
-    // Auto-disable when timer expires
     maintenanceState.enabled = false;
     maintenanceState.until = null;
     saveLocalState();
@@ -580,7 +640,7 @@ function handleApplyMaintenance() {
   if (enabled && minutes > 0) {
     maintenanceState.until = Date.now() + minutes * 60000;
   } else if (enabled && minutes === 0) {
-    maintenanceState.until = null; // until further notice
+    maintenanceState.until = null;
   } else {
     maintenanceState.until = null;
   }
@@ -599,4 +659,27 @@ function handleDisableMaintenance() {
   applyMaintenanceState();
   $("#maintEnabled").checked = false;
   alert("System Offline mode disabled.");
+}
+
+// --- Diagnostics ---
+
+function updateDiagnostics() {
+  $("#diagStatus").textContent = maintenanceState.enabled ? "Offline" : "Online";
+  $("#diagReason").textContent = maintenanceState.enabled
+    ? "Scheduled maintenance"
+    : "Normal operation";
+
+  if (maintenanceState.enabled) {
+    if (!maintenanceState.until) {
+      $("#diagReturn").textContent = "Until further notice";
+    } else {
+      $("#diagReturn").textContent = new Date(
+        maintenanceState.until
+      ).toLocaleString();
+    }
+  } else {
+    $("#diagReturn").textContent = "N/A";
+  }
+
+  $("#diagLastReboot").textContent = lastReboot || "Unknown";
 }
