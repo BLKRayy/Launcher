@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Global Maintenance Overlay -->
+  <!-- Global System Offline / Maintenance Overlay -->
   <div id="maintenanceOverlay" class="maintenance-overlay hidden">
     <div class="maintenance-inner">
       <div class="maintenance-top">
@@ -17,9 +17,10 @@
         </button>
       </div>
       <div class="maintenance-content">
-        <h1>Maintenance Mode</h1>
+        <div class="maintenance-label">SYSTEM OFFLINE</div>
+        <h1>NeonArc Launcher</h1>
         <p id="maintenanceMessage">
-          The site is currently undergoing maintenance. Please check back later.
+          The system is currently offline for maintenance. Please check back soon.
         </p>
         <div id="maintenanceTimer" class="maintenance-timer">
           Time remaining: —
@@ -127,10 +128,10 @@
       </div>
 
       <div id="adminBody" class="hidden">
-        <h3>Maintenance Mode</h3>
+        <h3>System Offline / Maintenance</h3>
         <div class="form-grid">
           <label>
-            <span>Enable Maintenance</span>
+            <span>Enable System Offline</span>
             <input id="maintEnabled" type="checkbox" />
           </label>
           <label>
@@ -140,12 +141,12 @@
         </div>
         <textarea
           id="maintMessage"
-          placeholder="Maintenance message shown to visitors"
+          placeholder="Offline message shown to visitors"
         ></textarea>
         <div class="admin-maint-actions">
-          <button id="maintApplyBtn" class="pill-btn">Apply Maintenance</button>
+          <button id="maintApplyBtn" class="pill-btn">Apply Settings</button>
           <button id="maintDisableBtn" class="pill-btn pill-danger">
-            Disable Maintenance
+            Disable Offline Mode
           </button>
         </div>
 
