@@ -8,6 +8,25 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Fake boot sequence overlay -->
+  <div id="bootOverlay" class="boot-overlay">
+    <div class="boot-inner">
+      <div class="boot-logo">
+        <span class="boot-mark">NA</span>
+        <span class="boot-text">NeonArc Systems</span>
+      </div>
+      <div class="boot-log">
+        <p>Initializing core modules...</p>
+        <p>Loading game library...</p>
+        <p>Checking system status...</p>
+        <p class="boot-final">Boot sequence complete.</p>
+      </div>
+      <div class="boot-progress">
+        <div class="boot-bar"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Global System Offline / Maintenance Overlay -->
   <div id="maintenanceOverlay" class="maintenance-overlay hidden">
     <div class="maintenance-inner glitch-container">
@@ -28,11 +47,22 @@
         <div id="maintenanceTimer" class="maintenance-timer">
           Time remaining: —
         </div>
+
+        <!-- System diagnostics panel -->
+        <div class="diagnostics-panel">
+          <h3>System Diagnostics</h3>
+          <p><strong>Status:</strong> <span id="diagStatus">Offline</span></p>
+          <p><strong>Reason:</strong> <span id="diagReason">Scheduled maintenance</span></p>
+          <p><strong>Expected return:</strong> <span id="diagReturn">Unknown</span></p>
+          <p><strong>Build:</strong> NeonArc v1.0.0</p>
+          <p><strong>Last reboot:</strong> <span id="diagLastReboot">—</span></p>
+          <p class="diag-hint">Press <code>L</code> to open admin login.</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Reboot overlay (shown briefly when maintenance ends automatically) -->
+  <!-- Reboot overlay -->
   <div id="rebootOverlay" class="reboot-overlay hidden">
     <div class="reboot-inner">
       <div class="reboot-label">SYSTEM REBOOT</div>
@@ -58,6 +88,7 @@
       <div class="topbar-right">
         <button id="themeToggle" class="pill-btn">Toggle Theme</button>
         <div class="profile">
+          <div class="profile-avatar" id="profileAvatar"></div>
           <input id="usernameInput" type="text" placeholder="Guest" />
         </div>
         <button id="adminBtn" class="pill-btn pill-danger">Admin</button>
@@ -132,6 +163,13 @@
       </div>
 
       <div id="adminAuth">
+        <div class="admin-profile-header">
+          <div class="admin-avatar"></div>
+          <div class="admin-profile-text">
+            <div class="admin-name">System Administrator</div>
+            <div class="admin-tag">@neonarc-admin</div>
+          </div>
+        </div>
         <p>Enter admin credentials:</p>
         <input id="adminUsername" type="text" placeholder="Username" />
         <input id="adminPassword" type="password" placeholder="Password" />
@@ -186,6 +224,11 @@
       </div>
     </div>
   </div>
+
+  <!-- Admin login sound -->
+  <audio id="adminLoginSound">
+    <source src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" type="audio/ogg" />
+  </audio>
 
   <script src="script.js"></script>
 </body>
