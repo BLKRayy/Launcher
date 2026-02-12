@@ -227,7 +227,8 @@ function attachEvents() {
     $("#adminModal").classList.add("hidden");
     // If maintenance mode is still active, show overlay again
     if (maintenanceState.enabled) {
-      $("#maintenanceOverlay").style.display = "flex";
+      $("#maintenanceOverlay").classList.remove("hidden");
+
     }
   });
 
@@ -260,7 +261,8 @@ function openAdminModal() {
   $("#adminPassword").value = "";
 
   // Hide maintenance overlay while admin is open
-  $("#maintenanceOverlay").style.display = "none";
+  $("#maintenanceOverlay").classList.add("hidden");
+
 }
 
 // --- Filtering + rendering ---
