@@ -128,6 +128,12 @@ body {
   gap: 8px;
 }
 
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .profile input {
   border-radius: 999px;
   border: 1px solid var(--border);
@@ -137,6 +143,14 @@ body {
   font-size: 13px;
   outline: none;
   width: 120px;
+}
+
+.profile-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 20%, #5b8cff, #ff4b81);
+  box-shadow: 0 0 12px rgba(91, 140, 255, 0.7);
 }
 
 /* Buttons */
@@ -391,7 +405,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 50;
+  z-index: 1000;
 }
 
 .modal-content {
@@ -485,6 +499,38 @@ body {
   margin-bottom: 8px;
 }
 
+/* Admin profile in modal */
+
+.admin-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.admin-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 20%, #5b8cff, #ff4b81);
+  box-shadow: 0 0 16px rgba(91, 140, 255, 0.8);
+}
+
+.admin-profile-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-tag {
+  font-size: 11px;
+  color: var(--muted);
+}
+
 /* System Offline / Maintenance overlay */
 
 .maintenance-overlay {
@@ -494,7 +540,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 900;
 }
 
 .maintenance-inner {
@@ -555,6 +601,35 @@ body {
 .maintenance-timer {
   font-size: 13px;
   color: var(--text);
+}
+
+/* Diagnostics panel */
+
+.diagnostics-panel {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: rgba(5, 7, 18, 0.9);
+  border: 1px solid var(--border);
+  text-align: left;
+  font-size: 12px;
+}
+
+.diagnostics-panel h3 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.diagnostics-panel p {
+  margin: 2px 0;
+}
+
+.diag-hint {
+  margin-top: 6px;
+  color: var(--muted);
 }
 
 /* Glitch effect */
@@ -652,7 +727,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 120;
+  z-index: 950;
 }
 
 .reboot-inner {
@@ -691,6 +766,94 @@ body {
   100% {
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(91, 140, 255, 0.4);
+  }
+}
+
+/* Boot overlay */
+
+.boot-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #1b2550 0, #050712 55%, #000 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.boot-inner {
+  width: 100%;
+  max-width: 420px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: linear-gradient(145deg, #0b0f1f, #050712);
+  box-shadow: var(--shadow-soft);
+}
+
+.boot-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.boot-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 20%, #5b8cff, #ff4b81);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+
+.boot-text {
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.boot-log {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.boot-log p {
+  margin: 2px 0;
+}
+
+.boot-final {
+  color: var(--text);
+}
+
+.boot-progress {
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(10, 14, 30, 0.9);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.boot-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #5b8cff, #ff4b81);
+  animation: boot-fill 2.2s ease-out forwards;
+}
+
+@keyframes boot-fill {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
   }
 }
 
