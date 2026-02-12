@@ -10,7 +10,7 @@
 <body>
   <!-- Global System Offline / Maintenance Overlay -->
   <div id="maintenanceOverlay" class="maintenance-overlay hidden">
-    <div class="maintenance-inner">
+    <div class="maintenance-inner glitch-container">
       <div class="maintenance-top">
         <button id="maintenanceAdminBtn" class="pill-btn pill-danger">
           Admin
@@ -18,7 +18,10 @@
       </div>
       <div class="maintenance-content">
         <div class="maintenance-label">SYSTEM OFFLINE</div>
-        <h1>NeonArc Launcher</h1>
+        <div class="maintenance-status-code">ERR_SYS_OFFLINE_503</div>
+        <h1 class="glitch-text" data-text="NeonArc Launcher">
+          NeonArc Launcher
+        </h1>
         <p id="maintenanceMessage">
           The system is currently offline for maintenance. Please check back soon.
         </p>
@@ -26,6 +29,14 @@
           Time remaining: —
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Reboot overlay (shown briefly when maintenance ends automatically) -->
+  <div id="rebootOverlay" class="reboot-overlay hidden">
+    <div class="reboot-inner">
+      <div class="reboot-label">SYSTEM REBOOT</div>
+      <p>Bringing NeonArc Launcher back online...</p>
     </div>
   </div>
 
@@ -121,10 +132,13 @@
       </div>
 
       <div id="adminAuth">
-        <p>Enter admin password:</p>
+        <p>Enter admin credentials:</p>
+        <input id="adminUsername" type="text" placeholder="Username" />
         <input id="adminPassword" type="password" placeholder="Password" />
         <button id="adminLoginBtn" class="pill-btn pill-danger">Login</button>
-        <p class="hint">Default password: <code>admin123</code> (client-side only)</p>
+        <p class="hint">
+          Username: <code>admin</code> &nbsp; Password: <code>loyal</code> (client-side only)
+        </p>
       </div>
 
       <div id="adminBody" class="hidden">
