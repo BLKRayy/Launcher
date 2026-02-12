@@ -181,12 +181,12 @@ function attachEvents() {
 
   // Admin modal (normal topbar)
   $("#adminBtn").addEventListener("click", () => {
-    $("#adminModal").classList.remove("hidden");
+    openAdminModal();
   });
 
   // Admin modal (from System Offline overlay)
   $("#maintenanceAdminBtn").addEventListener("click", () => {
-    $("#adminModal").classList.remove("hidden");
+    openAdminModal();
   });
 
   $("#closeAdmin").addEventListener("click", () => {
@@ -200,6 +200,14 @@ function attachEvents() {
   // Maintenance controls in admin
   $("#maintApplyBtn").addEventListener("click", handleApplyMaintenance);
   $("#maintDisableBtn").addEventListener("click", handleDisableMaintenance);
+}
+
+function openAdminModal() {
+  $("#adminModal").classList.remove("hidden");
+  $("#adminAuth").classList.remove("hidden");
+  $("#adminBody").classList.add("hidden");
+  $("#adminUsername").value = "";
+  $("#adminPassword").value = "";
 }
 
 // --- Filtering + rendering ---
@@ -375,15 +383,17 @@ function renderRecommended() {
 let adminAuthed = false;
 
 function handleAdminLogin() {
+  const user = $("#adminUsername").value.trim();
   const pwd = $("#adminPassword").value;
-  if (pwd === "admin123") {
+
+  if (user === "admin" && pwd === "loyal") {
     adminAuthed = true;
     $("#adminAuth").classList.add("hidden");
     $("#adminBody").classList.remove("hidden");
     renderAdminGameList();
     populateMaintenanceControls();
   } else {
-    alert("Wrong password.");
+    alert("Wrong username or password.");
   }
 }
 
@@ -497,6 +507,14 @@ function stopMaintenanceTimer() {
   $("#maintenanceTimer").textContent = "Time remaining: —";
 }
 
+function showRebootOverlay() {
+  const overlay = $("#rebootOverlay");
+  overlay.classList.remove("hidden");
+  setTimeout(() => {
+    overlay.classList.add("hidden");
+  }, 2000);
+}
+
 function updateMaintenanceTimerDisplay() {
   const timerEl = $("#maintenanceTimer");
 
@@ -519,6 +537,7 @@ function updateMaintenanceTimerDisplay() {
     maintenanceState.until = null;
     saveLocalState();
     applyMaintenanceState();
+    showRebootOverlay();
     return;
   }
 
