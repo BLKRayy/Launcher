@@ -395,6 +395,12 @@ body {
   background: rgba(20, 30, 60, 0.95);
   border-color: var(--accent-soft);
 }
+/* Modal (continued) */
+
+.recommended-item:hover {
+  background: rgba(20, 30, 60, 0.95);
+  border-color: var(--accent-soft);
+}
 
 /* Modal */
 
@@ -668,54 +674,24 @@ body {
 }
 
 @keyframes glitch-top {
-  0% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  10% {
-    clip: rect(4px, 9999px, 18px, 0);
-  }
-  20% {
-    clip: rect(10px, 9999px, 26px, 0);
-  }
-  30% {
-    clip: rect(2px, 9999px, 14px, 0);
-  }
-  40% {
-    clip: rect(16px, 9999px, 32px, 0);
-  }
-  50% {
-    clip: rect(8px, 9999px, 22px, 0);
-  }
-  60% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  100% {
-    clip: rect(0, 9999px, 0, 0);
-  }
+  0% { clip: rect(0, 9999px, 0, 0); }
+  10% { clip: rect(4px, 9999px, 18px, 0); }
+  20% { clip: rect(10px, 9999px, 26px, 0); }
+  30% { clip: rect(2px, 9999px, 14px, 0); }
+  40% { clip: rect(16px, 9999px, 32px, 0); }
+  50% { clip: rect(8px, 9999px, 22px, 0); }
+  60% { clip: rect(0, 9999px, 0, 0); }
+  100% { clip: rect(0, 9999px, 0, 0); }
 }
 
 @keyframes glitch-bottom {
-  0% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  10% {
-    clip: rect(18px, 9999px, 34px, 0);
-  }
-  20% {
-    clip: rect(6px, 9999px, 20px, 0);
-  }
-  30% {
-    clip: rect(12px, 9999px, 28px, 0);
-  }
-  40% {
-    clip: rect(4px, 9999px, 16px, 0);
-  }
-  50% {
-    clip: rect(0, 9999px, 0, 0);
-  }
-  100% {
-    clip: rect(0, 9999px, 0, 0);
-  }
+  0% { clip: rect(0, 9999px, 0, 0); }
+  10% { clip: rect(18px, 9999px, 34px, 0); }
+  20% { clip: rect(6px, 9999px, 20px, 0); }
+  30% { clip: rect(12px, 9999px, 28px, 0); }
+  40% { clip: rect(4px, 9999px, 16px, 0); }
+  50% { clip: rect(0, 9999px, 0, 0); }
+  100% { clip: rect(0, 9999px, 0, 0); }
 }
 
 /* Reboot overlay */
@@ -849,12 +825,8 @@ body {
 }
 
 @keyframes boot-fill {
-  0% {
-    width: 0%;
-  }
-  100% {
-    width: 100%;
-  }
+  0% { width: 0%; }
+  100% { width: 100%; }
 }
 
 /* Utilities */
