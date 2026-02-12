@@ -1,0 +1,29 @@
+[
+  {
+    "id": "cyber-runner",
+    "title": "Cyber Runner",
+    "url": "https://example.com/games/cyber-runner/index.html",
+    "thumbnail": "https://picsum.photos/seed/cyber/200/200",
+    "category": "Action",
+    "description": "Dash through neon streets, dodge obstacles, and chase high scores in this endless runner.",
+    "plays": 0
+  },
+  {
+    "id": "grid-puzzle",
+    "title": "Grid Puzzle",
+    "url": "https://example.com/games/grid-puzzle/index.html",
+    "thumbnail": "https://picsum.photos/seed/grid/200/200",
+    "category": "Puzzle",
+    "description": "A clean, minimal puzzle game where you align tiles to clear the board.",
+    "plays": 0
+  },
+  {
+    "id": "drift-city",
+    "title": "Drift City",
+    "url": "https://example.com/games/drift-city/index.html",
+    "thumbnail": "https://picsum.photos/seed/drift/200/200",
+    "category": "Racing",
+    "description": "Slide around tight corners in a neon-soaked city built for drifting.",
+    "plays": 0
+  }
+]
