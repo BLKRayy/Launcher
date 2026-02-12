@@ -485,7 +485,7 @@ body {
   margin-bottom: 8px;
 }
 
-/* Maintenance overlay */
+/* System Offline / Maintenance overlay */
 
 .maintenance-overlay {
   position: fixed;
@@ -517,6 +517,18 @@ body {
 
 .maintenance-content {
   text-align: center;
+}
+
+.maintenance-label {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 75, 129, 0.7);
+  color: #ffb3c9;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
 .maintenance-content h1 {
