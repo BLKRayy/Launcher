@@ -11,7 +11,7 @@ let totalGamesPlayed = 0;
 let maintenanceState = {
   enabled: false,
   message:
-    "The site is currently undergoing maintenance. Please check back later.",
+    "The system is currently offline for maintenance. Please check back soon.",
   until: null // timestamp (ms) or null
 };
 let maintenanceTimerInterval = null;
@@ -109,7 +109,7 @@ function loadLocalState() {
         enabled: !!parsed.enabled,
         message:
           parsed.message ||
-          "The site is currently undergoing maintenance. Please check back later.",
+          "The system is currently offline for maintenance. Please check back soon.",
         until: parsed.until || null
       };
     } catch {}
@@ -184,7 +184,7 @@ function attachEvents() {
     $("#adminModal").classList.remove("hidden");
   });
 
-  // Admin modal (from maintenance overlay)
+  // Admin modal (from System Offline overlay)
   $("#maintenanceAdminBtn").addEventListener("click", () => {
     $("#adminModal").classList.remove("hidden");
   });
@@ -464,7 +464,7 @@ function handleExportJson() {
   );
 }
 
-// --- Maintenance mode ---
+// --- System Offline / Maintenance mode ---
 
 function applyMaintenanceState() {
   const overlay = $("#maintenanceOverlay");
@@ -514,7 +514,7 @@ function updateMaintenanceTimerDisplay() {
   const diff = maintenanceState.until - now;
 
   if (diff <= 0) {
-    // Auto-disable maintenance when timer expires
+    // Auto-disable when timer expires
     maintenanceState.enabled = false;
     maintenanceState.until = null;
     saveLocalState();
@@ -551,7 +551,7 @@ function handleApplyMaintenance() {
   const enabled = $("#maintEnabled").checked;
   const message =
     $("#maintMessage").value.trim() ||
-    "The site is currently undergoing maintenance. Please check back later.";
+    "The system is currently offline for maintenance. Please check back soon.";
   const minutesRaw = $("#maintMinutes").value;
   const minutes = minutesRaw ? parseInt(minutesRaw, 10) : 0;
 
@@ -568,7 +568,7 @@ function handleApplyMaintenance() {
 
   saveLocalState();
   applyMaintenanceState();
-  alert("Maintenance settings updated.");
+  alert("System Offline settings updated.");
 }
 
 function handleDisableMaintenance() {
@@ -579,5 +579,5 @@ function handleDisableMaintenance() {
   saveLocalState();
   applyMaintenanceState();
   $("#maintEnabled").checked = false;
-  alert("Maintenance mode disabled.");
+  alert("System Offline mode disabled.");
 }
