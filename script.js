@@ -539,16 +539,17 @@ function applyMaintenanceState() {
 
   if (maintenanceState.enabled) {
     overlay.classList.remove("hidden");
-    overlay.style.display = "flex";
+    overlay.style.display = ""; // remove forced display
     startMaintenanceTimer();
     updateDiagnostics();
   } else {
     overlay.classList.add("hidden");
-    overlay.style.display = "none";
+    overlay.style.display = ""; // remove forced display
     stopMaintenanceTimer();
     updateDiagnostics();
   }
 }
+
 
 function startMaintenanceTimer() {
   updateMaintenanceTimerDisplay();
